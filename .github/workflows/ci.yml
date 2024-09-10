@@ -1,6 +1,12 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
 
 jobs:
   eslint:
@@ -30,6 +36,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,4 +47,14 @@ jobs:
           node-version: 20.11.0
           cache: 'npm'
       - run: npm ci
+      - run: echo "${{secrets.ENV_FILE}}" >> .env
       - run: npm test
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'reports/jest-html'
+      - name: Deploy to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
