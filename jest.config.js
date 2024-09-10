@@ -196,12 +196,15 @@ const config = {
 
   reporters: [
     'default',
-    ['jest-html-reporters', {
-    'publicPath': './reports/jest-html',
-      'filename': 'index.html',
-      'openReport': !process.env.CI
-    }]
-  ]
+    [
+      'jest-html-reporters',
+      {
+        publicPath: './reports/jest-html',
+        filename: 'index.html',
+        openReport: !process.env.CI,
+      },
+    ],
+  ],
 }
 
 module.exports = config

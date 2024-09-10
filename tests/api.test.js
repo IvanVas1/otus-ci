@@ -8,8 +8,8 @@ describe('Create user Book Store API', () => {
       .post('/Account/v1/User')
       .set('Accept', 'application/json')
       .send({
-        userName: userName,
-        password: password,
+        userName,
+        password,
       })
     return response
   }
@@ -49,8 +49,8 @@ describe('Получение токена на Book Store', () => {
       .post('/Account/v1/GenerateToken')
       .set('Accept', 'application/json')
       .send({
-        userName: userName,
-        password: password,
+        userName,
+        password,
       })
     return response
   }
