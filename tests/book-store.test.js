@@ -1,3 +1,4 @@
+import config from '../framework/config'
 import {
   createBook,
   generateToken,
@@ -7,29 +8,24 @@ import {
 } from '../src/book-store'
 
 let token
-const isbn = '9781449331818'
 
 describe('Authorized', () => {
   beforeAll(async () => {
-    const response = await generateToken('vaiv', 'Qwertyu*123')
+    const response = await generateToken(config.userName, config.password)
     token = response.body.token
   })
 
   it('Create Book', async () => {
-    const response = await createBook(
-      token,
-      '14abd043-bb19-43da-9a80-cfd375b9d0f7',
-      isbn,
-    )
+    const response = await createBook(token, config.userId, config.isbn)
     expect(response.status).toBe(201)
     expect(response.body).toHaveProperty('books', expect.any(Array))
   })
 
   it('Get Book information', async () => {
-    const response = await getBook(isbn)
+    const response = await getBook(config.isbn)
     expect(response.status).toBe(200)
     expect(response.body).toMatchObject({
-      isbn,
+      isbn: config.isbn,
       title: expect.any(String),
       subTitle: expect.any(String),
       author: expect.any(String),
@@ -43,26 +39,19 @@ describe('Authorized', () => {
   it('Update Book', async () => {
     const response = await updateBook(
       token,
-      isbn,
-      '14abd043-bb19-43da-9a80-cfd375b9d0f7',
+      config.isbn,
+      config.userId,
       '9781491950296',
     )
 
     expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty(
-      'userId',
-      '14abd043-bb19-43da-9a80-cfd375b9d0f7',
-    )
-    expect(response.body).toHaveProperty('username', 'vaiv')
+    expect(response.body).toHaveProperty('userId', config.userId)
+    expect(response.body).toHaveProperty('username', config.userName)
     expect(response.body.books.length).toBeGreaterThan(0)
   })
 
   it('Delete Book', async () => {
-    const response = await deleteBook(
-      token,
-      '9781491950296',
-      '14abd043-bb19-43da-9a80-cfd375b9d0f7',
-    )
+    const response = await deleteBook(token, '9781491950296', config.userId)
 
     expect(response.status).toBe(204)
   })
