@@ -12,7 +12,7 @@
     "codestyle:ci": "run-p lint:ci format:ci",
     "codestyle": "run-s lint format",
     "build": "babel src --out-dir build --source-maps inline",
-    "test": "jest --verbose",
+    "test": "jest --verbose --runInBand",
     "coverage": "jest --coverage"
   },
   "author": "Damir Rysaev <freepad@ya.ru>",
@@ -38,5 +38,8 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.2.5",
     "supertest": "^7.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
   }
 }
